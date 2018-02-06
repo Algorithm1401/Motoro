@@ -25,6 +25,13 @@ public class ProgramFile {
         this.tool = tool;
     }
 
+    /**
+     *
+     * Methode die effectief alle FlexObjects gaat samennemen en gaat parsen naar een RAPID code bestand en het gaat opslaan
+     * op het gedefinieerde pad.
+     *
+     */
+
     public static void createProgramFiles(ProgramFile programFile, String programName, String path){
 
         List<String> toWrite = new ArrayList<>();

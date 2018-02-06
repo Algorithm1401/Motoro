@@ -8,6 +8,12 @@ import java.util.List;
 
 public class CheckIf {
 
+    /**
+     * If statements omgezet naar Rapid
+     * @param variable Variable dat je telkens gaat checken
+     * @param optionValues Waarde waarmee je gaat checken
+     */
+
     public static void setOptions(Variable variable, List<String> optionValues){
 
         List<String> ifStrings = new ArrayList<>();

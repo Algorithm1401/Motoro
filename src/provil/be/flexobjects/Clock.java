@@ -2,6 +2,10 @@ package provil.be.flexobjects;
 
 public class Clock {
 
+    /**
+     * Clock object om een timer te maken.
+     */
+
     String name;
 
     public Clock(String name){

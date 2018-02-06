@@ -2,6 +2,10 @@ package provil.be.flexobjects;
 
 public class Points {
 
+    /**
+     * Object voor het maken van de punten voor de robot.
+     */
+
     //<editor-fold desc="Defined items">
     String pointName;
 

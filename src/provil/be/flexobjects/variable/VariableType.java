@@ -2,6 +2,12 @@ package provil.be.flexobjects.variable;
 
 public enum VariableType {
 
+    /**
+     *
+     * Rapid code variables omgezet naar java en vice versa.
+     *
+     */
+
     NUM("num"),
     STRING("string"),
     SPEED("speeddata");

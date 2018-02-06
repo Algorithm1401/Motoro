@@ -4,6 +4,10 @@ import provil.be.flexobjects.ProgramFile;
 
 public class Variable {
 
+    /**
+     * Variable methodes in de rapid code voor converteren en dergelijke.
+     */
+
     //<editor-fold desc="Objects">
     VariableType type;
     String initData;

@@ -3,14 +3,19 @@ package provil.be.functions;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.Properties;
 
 public class MySQL {
 
-    public Connection getConnection() throws SQLException{
+    /**
+     * JDBC database connectie methode om de verbinding te maken met de ingegeven URL
+     * @return De connectie met de mysql database.
+     * @throws SQLException
+     */
+
+    public Connection getConnection(String URL) throws SQLException{
 
         Connection conn;
-        String URL = "jdbc:mysql://pixelgalaxy.org:3306/Motoro";
+        // Mijn JDBC adres: "jdbc:mysql://pixelgalaxy.org:3306/Motoro"
 
         try {
 

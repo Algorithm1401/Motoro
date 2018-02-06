@@ -1,25 +1,26 @@
 package provil.be.gui;
 
-import javafx.scene.*;
-import javafx.geometry.*;
-import javafx.stage.*;
-import javafx.scene.control.*;
-import javafx.scene.layout.*;
-
-import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.layout.StackPane;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeView;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import provil.be.Main;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.Properties;
 
 /**
  * Created by robin on 24/11/2017.
  */
 public class Settings {
+
+    /**
+     * Methode om de settings window te laten zien waar je de properties kan aanpassen.
+     */
 
     public static void display(){
 

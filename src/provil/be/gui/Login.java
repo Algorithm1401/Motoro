@@ -1,11 +1,12 @@
 package provil.be.gui;
+
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
 import javafx.scene.control.Button;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.*;
+import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
 /**
@@ -26,19 +27,34 @@ public class Login extends Application {
      */
     //</editor-fold>
 
+    /**
+     * Methode van de application class die override is
+     * @param args Empty
+     */
+
     public static void startGUI(String[] args){
         launch(args);
     }
 
+    /**
+     * Methode om te checken ofdat de ingegeven data correct is, en wordt gekoppeld aan een MySQL database waarbij
+     * hij de data gaat ophalen, gaat vergelijken met de ingegeven data en dan een boolean returnen met success of failure.
+     * @param name Naam van de gebruiker
+     * @param password paasswoord van de gebruiker.
+     * @return boolean die aangeeft of de login succesvol is of niet.
+     */
+
     public static boolean checkCredentials(String name, String password){
 
-        if(name.equals("Robin") && (password.equals("password"))){
-            return true;
-        }
-        return false;
+        return name.equals("Robin") && (password.equals("password"));
     }
 
-    // Overridden method to customize the Stage
+    /**
+     * Overriden methode van de application class om de window te laten zien.
+     * @param primaryStage
+     * @throws Exception
+     */
+
     @Override
     public void start(Stage primaryStage) throws Exception {
 

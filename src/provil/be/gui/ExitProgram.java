@@ -1,11 +1,14 @@
 package provil.be.gui;
 
-import javafx.geometry.*;
-import javafx.stage.*;
-import javafx.scene.control.*;
-import javafx.scene.layout.*;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 /**
  * Created by robin on 24/11/2017.
@@ -13,6 +16,13 @@ import javafx.scene.control.Button;
 public class ExitProgram {
 
     static boolean answer;
+
+    /**
+     * Methode om de exit window te laten zien op het scherm
+     * @param title Titel van het schermpje
+     * @param message Bericht dat je wilt laten zien op het schermpje.
+     * @return Boolean waarbij de waarde aangeeft of de gebruiker het programma wilt afsluiten of niet.
+     */
 
     public static boolean display(String title, String message){
 

@@ -34,6 +34,12 @@ public class Tool {
     double zi;
     //</editor-fold>
 
+    /**
+     *
+     * Object om de tool te definiëren en om te zetten naar RAPID code
+     *
+     */
+
     public Tool(String toolName, boolean robhold, double x, double y, double z, double q1, double q2, double q3, double q4,
                 double mass, double massMidPointX, double massMidPointY, double massMidPointZ, double q1_1, double q2_1, double q3_1, double q4_1, double xi, double yi, double zi){
 

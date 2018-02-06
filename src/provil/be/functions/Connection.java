@@ -1,8 +1,6 @@
 package provil.be.functions;
 
 import org.apache.commons.net.ftp.FTPClient;
-import org.apache.commons.net.ftp.FTPListParseEngine;
-import org.apache.commons.net.ftp.FTPReply;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -23,6 +21,15 @@ public class Connection {
     Passive FTP
      */
     //</editor-fold>
+
+    /**
+     * Methode om via een FTP verbinding bestanden te verzenden naar de robotarm.
+     * @param client FTPClient object
+     * @param hostname Hostname van de robotcontroller
+     * @param username gebruikersnaam van de ftp gebruiker
+     * @param password passwoord van de ftp gebruiker
+     * @param file bestand om door te sturen naar de host.
+     */
 
     public static void sendFile(FTPClient client, String hostname, String username, String password, File file) {
 

@@ -2,6 +2,11 @@ package provil.be.flexobjects;
 
 public class Move {
 
+    /**
+     * Object om de arm te bewegen met behulp van het omzetten naar Rapid.
+     * Hierbij maakt hij gebruik van de moveType enums om aan te geven op welke manier hij deze beweging gaat uitvoeren.
+     */
+
     //<editor-fold desc="Defined items">
     String moveType;
     Points point;

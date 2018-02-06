@@ -1,7 +1,6 @@
 package provil.be.functions;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -19,6 +18,10 @@ public class AxisMovements {
 
     private List<Double> axisDimensions;
     //</editor-fold>
+
+    /**
+     * Methodes voor de programmatie als er geen gebruik gemaakt zou gehad kunnen worden van de RAPID programmeertaal.
+     */
 
     public AxisMovements(List<Double> gearRatio, List<Double> axisDimensions, List<Double> axisRotated){
         this.gearRatio = gearRatio;

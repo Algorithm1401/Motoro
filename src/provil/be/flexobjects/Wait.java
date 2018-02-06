@@ -4,6 +4,12 @@ public class Wait {
 
     double time;
 
+    /**
+     *
+     *  Delay object om het programma te pauzeren.
+     *
+     */
+
     public Wait(double time){
         this.time = time;
     }

@@ -12,6 +12,12 @@ import java.io.File;
 
 public class FXUtils {
 
+    /**
+     * Simpelere methodes om makkelijke objecten aan te maken in een JavaFX scene.
+     *
+     * @return JavaFX objects.
+     */
+
     //<editor-fold desc="JavaFX objects creators">
     public static Button createButton(String title){
         Button button = new Button(title);

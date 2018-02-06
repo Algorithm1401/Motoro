@@ -5,6 +5,10 @@ package provil.be.functions;
  */
 public class Coordinates {
 
+    /**
+     * Coordinaten object om op een simpele manier de coordinaten door te geven aan de robot.
+     */
+
     private int x;
     private int y;
     private int z;

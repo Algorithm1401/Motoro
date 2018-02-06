@@ -36,6 +36,10 @@ public class Move {
     }
     //</editor-fold>
 
+    /**
+     * Methode om de huidige move type aan te geven.
+     */
+
     public static void set(Move move){
         String moveString = new String();
         if(move.getMoveType().equals(MoveType.LINEAR)){
