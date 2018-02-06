@@ -22,6 +22,12 @@ public class Main {
 
     public static File propertiesConfig = new File("C:\\Users\\robin.peeters.PROVDOM\\Desktop\\config.properties");
 
+    /**
+     *
+     * Maakt een connectie met de MySQL Database die ingegeven is
+     *
+     */
+
     private static void setupMySQLDriver(){
 
         try{
@@ -33,6 +39,13 @@ public class Main {
         }
 
     }
+
+    /**
+     *
+     * @param property
+     * @return De bijhorende waarde van de property
+     *
+     */
 
     public static String getPropertyValue(String property){
 
@@ -60,13 +73,26 @@ public class Main {
         return value;
     }
 
-    public static void setPropertyValue(String property, String value){
+    /**
+
+    Als deze methode opgeroepen wordt met de opgegeven parameters, zal hij
+     de string value instellingen bij de string property in het properties bestand.
+
+     @param propertyValues Hierbij is de key in de map de property naam en de wildcard
+     is de waarde die bij de bijhorende key oftewel property ingevoerd moet worden.
+
+     */
+
+    public static void setPropertyValue(Map<String, ?> propertyValues){
 
         Properties properties = new Properties();
 
         try{
 
-            properties.setProperty(property, value);
+            for(int i = 0; i<propertyValues.size(); i++) {
+                String property = (String) propertyValues.keySet().toArray()[i];
+                properties.setProperty(property, propertyValues.get(property).toString());
+            }
             OutputStream out = new FileOutputStream(propertiesConfig);
             properties.store(out, "");
 
@@ -76,9 +102,28 @@ public class Main {
 
     }
 
-    public static void setConfigPath(File Newfile){
-        propertiesConfig = Newfile;
+    /**
+
+    Methode om het programma aan te geven waar
+    de properties file zich bevindt.
+
+    @param properties pad naar het properties bestand.
+
+     */
+
+    public static void setConfigPath(File properties){
+        propertiesConfig = properties;
     }
+
+    /**
+
+    Deze methode maakt een bestand aan met een programma
+    dat ik gemaakt heb. Dit bestand komt te staan op het pad
+    van string path + programname. Daarna probeert hij
+    het programma te verzenden via FTP naar het ingesteld
+    IP adres.
+
+     */
 
     public static void generateRobotFiles(){
         // Temporary inputs for the path and name of the program
@@ -215,14 +260,16 @@ public class Main {
 
     }
 
-    public static void main(String[] args) {
+    /**
 
-        // Specify all gear ratio's of the robotic arm
-        // Parameters: gear ratio's, dimensions of the arm, current rotation of the motors
-        // !! Not any use atm since all these functions are already made in the RAPID code
-        // AxisMovements am = new AxisMovements(Arrays.asList(5.0, 5.0, 5.0, 5.0, 5.0, 5.0), Arrays.asList(15.0, 15.0), Arrays.asList(0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
-        // Create coordinates object of the position of the object
-        //Coordinates coordinatesObjective = new Coordinates(10,10,10);
+    In de main method gaat hij eerst een connectie met de MySQL database
+    proberen te maken die thuis bij mij opstaat zodanig dat hij kan
+    valideren of de gebruiker mag inloggen met zijn gegevens. Vervolgens
+    opent hij de window voor in te loggen.
+
+     */
+
+    public static void main(String[] args) {
 
         setupMySQLDriver();
 
