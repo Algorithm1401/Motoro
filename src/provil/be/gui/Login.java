@@ -6,7 +6,11 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 /**
@@ -70,6 +74,9 @@ public class Login extends Application {
 
         // Password & username input fields
         TextField usernameInput = FXUtils.createTextfield("Insert username here");
+        usernameInput.setStyle("-fx-text-inner-color: blue;");
+        usernameInput.setStyle("-fx-text-inner-color: black;");
+
         PasswordField passwordInput = FXUtils.createPasswordField("Insert password here");
 
         // Login & Activate buttons
@@ -100,8 +107,11 @@ public class Login extends Application {
 
         //<editor-fold desc="Window properties">
         // Add all components to the grid
+        loginbutton.setBackground(new Background(new BackgroundFill(Color.grayRgb(125), CornerRadii.EMPTY, Insets.EMPTY)));
         grid.getChildren().addAll(usernameInput, passwordInput, loginbutton);
+        grid.setBackground(new Background(new BackgroundFill(Color.grayRgb(32), CornerRadii.EMPTY, Insets.EMPTY)));
         Scene scene = new Scene(grid, 300, 200);
+
         window.setScene(scene);
         window.show();
         //</editor-fold>

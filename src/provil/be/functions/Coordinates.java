@@ -13,12 +13,22 @@ public class Coordinates {
     private int y;
     private int z;
 
+    private double x2;
+    private double y2;
+    private double z2;
+
     public Coordinates(int x, int y, int z){
 
         this.x = x;
         this.y = y;
         this.z = z;
 
+    }
+
+    public Coordinates(double x2, double y2, double z2){
+        this.x2 = x2;
+        this.y2 = y2;
+        this.z2 = z2;
     }
 
     public int getX(){
@@ -33,4 +43,15 @@ public class Coordinates {
         return this.z;
     }
 
+    public double getX2() {
+        return x2;
+    }
+
+    public double getY2() {
+        return y2;
+    }
+
+    public double getZ2() {
+        return z2;
+    }
 }
