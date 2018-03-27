@@ -20,7 +20,7 @@ import java.util.*;
 
 public class Main {
 
-    public static File propertiesConfig = new File("C:\\Users\\robin.peeters.PROVDOM\\Desktop\\config.properties");
+    public static File propertiesConfig = new File(System.getProperty("user.home") + "/Desktop" + "/config.properties");
 
     /**
      *
@@ -28,14 +28,13 @@ public class Main {
      *
      */
 
-    private static void setupMySQLDriver(){
+    public static void setupMySQLDriver(){
 
-        try{
-
+        try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
-
-        }catch(Exception e){
-            e.printStackTrace();
+        } catch (Exception ex) {
+            System.out.println("Setup error:");
+            ex.printStackTrace();
         }
 
     }
@@ -55,6 +54,8 @@ public class Main {
         String value = null;
 
         try{
+
+            System.out.println(propertiesConfig.getPath() + " properties config path.");
 
             fileReader = new FileReader(propertiesConfig);
             properties.load(fileReader);
@@ -113,6 +114,7 @@ public class Main {
 
     public static void setConfigPath(File properties){
         propertiesConfig = properties;
+        System.out.println(properties.getPath() + " path selected properties file");
     }
 
     /**

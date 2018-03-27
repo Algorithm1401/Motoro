@@ -4,6 +4,7 @@ import com.interactivemesh.jfx.importer.stl.StlMeshImporter;
 import javafx.geometry.Insets;
 import javafx.scene.*;
 import javafx.scene.control.*;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
@@ -18,8 +19,13 @@ import provil.be.Main;
 import provil.be.functions.stl.STL;
 
 import java.io.File;
+
 public class Workspace {
 
+    private static final Color lightColor = Color.rgb(255, 255, 149);
+
+    //</editor-fold>
+    private static final Color stlColor = Color.rgb(116, 138, 255);
     //<editor-fold desc="Menu items">
     // File menu items
     static MenuItem newitem, openitem, saveitem, saveasitem, settingsitem, generateitem, exititem,
@@ -29,31 +35,55 @@ public class Workspace {
 
     // View menu items
     zoomin, zoomout;
-
-    //</editor-fold>
-
     /**
      * Instellingen voor de stl viewer scene.
      */
 
     private static File currentFile;
-
     private static double MODEL_SCALE_FACTOR = 100;
     private static double MODEL_X_OFFSET = 0;
     private static double MODEL_Y_OFFSET = 0;
-
     private static int VIEWPORT_SIZE = 800;
-
-    private static final Color lightColor = Color.rgb(255, 255, 149);
-    private static final Color stlColor = Color.rgb(116, 138, 255);
-
+    private static Scene stlScene;
     private static Group stlView;
     private static PointLight pointLight;
+    private static BorderPane pane = new BorderPane();
 
     /**
-     *
-      * @return oppervlakte met de bijhorende 3D mesh data
-     *
+     * @param node Node to add listener to
+     */
+
+    public static void addMouseScrolling(Node node) {
+        node.setOnScroll((ScrollEvent event) -> {
+            // Adjust the zoom factor as per your requirement
+            System.out.println(event.getDeltaX() + " Mutliplier X");
+            System.out.println(event.getDeltaY() + " Multiplier Y");
+            double zoomFactor = 1.25;
+            double deltaY = event.getDeltaY();
+            if (deltaY < 0){
+                zoomFactor = 0.75;
+            }
+            MODEL_SCALE_FACTOR *= zoomFactor;
+            pane.setCenter(stlViewer());
+        });
+    }
+
+    public static void addMouseDrag(Node node){
+        node.setOnDragDetected(e -> {
+
+            System.out.println(e.getPickResult().getIntersectedDistance() + "Distance in double");
+            System.out.println(e.getPickResult().getIntersectedPoint().getX() + " X from point");
+            System.out.println(e.getPickResult().getIntersectedPoint().getY());
+
+            MODEL_X_OFFSET += e.getPickResult().getIntersectedPoint().getX();
+            MODEL_Y_OFFSET += e.getPickResult().getIntersectedPoint().getY();
+            pane.setCenter(stlViewer());
+
+        });
+    }
+
+    /**
+     * @return oppervlakte met de bijhorende 3D mesh data
      */
 
     static MeshView[] loadMeshViews() {
@@ -61,13 +91,11 @@ public class Workspace {
         importer.read(currentFile);
         Mesh mesh = importer.getImport();
 
-        return new MeshView[] { new MeshView(mesh) };
+        return new MeshView[]{new MeshView(mesh)};
     }
 
     /**
-     *
      * @return 'Applet' met de 3D mesh viewer in
-     *
      */
 
     private static Group buildScene() {
@@ -89,16 +117,16 @@ public class Workspace {
         }
 
         pointLight = new PointLight(lightColor);
-        pointLight.setTranslateX(VIEWPORT_SIZE*3/4);
-        pointLight.setTranslateY(VIEWPORT_SIZE/2);
-        pointLight.setTranslateZ(VIEWPORT_SIZE/2);
+        pointLight.setTranslateX(VIEWPORT_SIZE * 3 / 4);
+        pointLight.setTranslateY(VIEWPORT_SIZE / 2);
+        pointLight.setTranslateZ(VIEWPORT_SIZE / 2);
         PointLight pointLight2 = new PointLight(lightColor);
-        pointLight2.setTranslateX(VIEWPORT_SIZE*1/4);
-        pointLight2.setTranslateY(VIEWPORT_SIZE*3/4);
-        pointLight2.setTranslateZ(VIEWPORT_SIZE*3/4);
+        pointLight2.setTranslateX(VIEWPORT_SIZE * 1 / 4);
+        pointLight2.setTranslateY(VIEWPORT_SIZE * 3 / 4);
+        pointLight2.setTranslateZ(VIEWPORT_SIZE * 3 / 4);
         PointLight pointLight3 = new PointLight(lightColor);
-        pointLight3.setTranslateX(VIEWPORT_SIZE*5/8);
-        pointLight3.setTranslateY(VIEWPORT_SIZE/2);
+        pointLight3.setTranslateX(VIEWPORT_SIZE * 5 / 8);
+        pointLight3.setTranslateY(VIEWPORT_SIZE / 2);
         pointLight3.setTranslateZ(0);
 
         Color ambientColor = Color.rgb(80, 80, 80, 0);
@@ -114,10 +142,8 @@ public class Workspace {
     }
 
     /**
-     *
      * @param scene Scene om de camera aan toe te voegen.
      * @return Virtual camera
-     *
      */
 
     private static PerspectiveCamera addCamera(Scene scene) {
@@ -131,9 +157,7 @@ public class Workspace {
     }
 
     /**
-     *
      * @return STL viewer Node om toe te voegen aan een window
-     *
      */
 
     public static Node stlViewer() {
@@ -144,19 +168,21 @@ public class Workspace {
         group.setTranslateX(50);
         group.setTranslateY(50);
 
-        Scene scene = new Scene(group, VIEWPORT_SIZE, VIEWPORT_SIZE, true);
-        scene.setFill(Color.rgb(116, 138, 255));
-        addCamera(scene);
+        stlScene = new Scene(group, VIEWPORT_SIZE, VIEWPORT_SIZE, true);
+        stlScene.setFill(Color.rgb(116, 138, 255));
+        addCamera(stlScene);
+
+        addMouseScrolling(stlView);
+        addMouseDrag(stlView);
+
         return group;
     }
 
     /**
-     *
      * Methode om de workspace window te openen.
-     *
      */
 
-    public static void display(){
+    public static void display() {
 
         //<editor-fold desc="All defined items">
         Stage window = new Stage();
@@ -164,7 +190,7 @@ public class Workspace {
 
         // Define propertiesConfig menu items
 
-        newitem = new MenuItem("New");
+        newitem = new MenuItem("Setup");
         openitem = new MenuItem("Open");
         saveitem = new MenuItem("Save");
         saveasitem = new MenuItem("Save as");
@@ -186,7 +212,6 @@ public class Workspace {
         zoomin = new MenuItem("Zoom in");
         zoomout = new MenuItem("Zoom out");
 
-        BorderPane pane = new BorderPane();
         MenuBar menubar = new MenuBar();
 
         Menu fileMenu = new Menu("File");
@@ -235,25 +260,32 @@ public class Workspace {
 
         //<editor-fold desc="Menu items listeners">
         // Set listeners for File menu buttons
-        newitem.setOnAction(e -> System.out.println("creating new propertiesConfig.."));
+        newitem.setOnAction(e -> {
+            System.out.println("Creating properties file");
+
+            File properties = new File(System.getProperty("user.home") + "/Desktop" + "/configProperties.properties");
+
+
+        });
 
         openitem.setOnAction(e -> {
             File selectedFile;
             selectedFile = FXUtils.getFileFromBrowser("OBJ and STL files", "user.home", "Open a OBJ or STL propertiesConfig to edit"
                     , "obj", "stl");
             currentFile = selectedFile;
-                TreeView treeView = new TreeView();
-                TreeItem<String> root = new TreeItem<>(selectedFile.getName());
-                treeView.setRoot(root);
-                treeView.setBackground(new Background(new BackgroundFill(Color.grayRgb(32), CornerRadii.EMPTY, Insets.EMPTY)));
-                pane.setLeft(treeView);
+            TreeView treeView = new TreeView();
+            TreeItem<String> root = new TreeItem<>(selectedFile.getName());
+            treeView.setRoot(root);
+            treeView.setBackground(new Background(new BackgroundFill(Color.grayRgb(32), CornerRadii.EMPTY, Insets.EMPTY)));
+            pane.setLeft(treeView);
 
 //            Main.setPropertyValue("saved path", selectedFile.getPath());
 
-                pane.setCenter(stlViewer());
-                window.setTitle("Motoro: " + selectedFile.getName() + " - " + selectedFile.getPath());
+            window.setTitle("Motoro: " + selectedFile.getName() + " - " + selectedFile.getPath());
 
             STL.parseSTL(selectedFile);
+
+            pane.setCenter(stlViewer());
 
             System.out.println(STL.getStlConverted().toString());
 
@@ -264,7 +296,7 @@ public class Workspace {
         generateitem.setOnAction(e -> Main.generateRobotFiles());
 
         exititem.setOnAction(e -> {
-            if(ExitProgram.display("Exit program?", "Are you sure you want to exit the program?")){
+            if (ExitProgram.display("Exit program?", "Are you sure you want to exit the program?")) {
                 window.close();
             }
         });

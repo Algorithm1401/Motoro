@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Background;
@@ -12,6 +13,7 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import provil.be.functions.MySQL;
 
 /**
  * Created by robin on 23/11/2017.
@@ -20,6 +22,7 @@ import javafx.stage.Stage;
 public class Login extends Application {
 
     Stage window;
+    private Button loginbutton, activatebutton;
 
     //<editor-fold desc="Canvas information">
     /*/
@@ -33,28 +36,44 @@ public class Login extends Application {
 
     /**
      * Methode van de application class die override is
+     *
      * @param args Empty
      */
 
-    public static void startGUI(String[] args){
+    public static void startGUI(String[] args) {
         launch(args);
     }
 
-    /**
-     * Methode om te checken ofdat de ingegeven data correct is, en wordt gekoppeld aan een MySQL database waarbij
-     * hij de data gaat ophalen, gaat vergelijken met de ingegeven data en dan een boolean returnen met success of failure.
-     * @param name Naam van de gebruiker
-     * @param password paasswoord van de gebruiker.
-     * @return boolean die aangeeft of de login succesvol is of niet.
-     */
+    public static boolean checkCredentials(String username, String password) {
 
-    public static boolean checkCredentials(String name, String password){
+        boolean userValid = false;
 
-        return name.equals("Robin") && (password.equals("password"));
+        for (Object s : (MySQL.getKeyValues(2))) {
+            if (s instanceof String) {
+                System.out.println(s);
+                if (((String) s).equalsIgnoreCase(username)) {
+                    userValid = true;
+                }
+            }
+        }
+
+        if (userValid) {
+            for (Object s : (MySQL.getKeyValues(3))) {
+                if (s instanceof String) {
+                    System.out.println(s);
+                    if (s.equals(password)) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+
     }
 
     /**
      * Overriden methode van de application class om de window te laten zien.
+     *
      * @param primaryStage
      * @throws Exception
      */
@@ -68,11 +87,17 @@ public class Login extends Application {
         window.setTitle("Motoro - Login");
 
         GridPane grid = new GridPane();
-        grid.setPadding(new Insets(10,10,10,10));
+        grid.setPadding(new Insets(10, 10, 10, 10));
         grid.setVgap(8);
         grid.setHgap(10);
 
         // Password & username input fields
+        Label emailLabel = FXUtils.createLabel("Email:");
+        Label passwordLabel = FXUtils.createLabel("Password:");
+
+        emailLabel.setTextFill(Color.grayRgb(255));
+        passwordLabel.setTextFill(Color.grayRgb(255));
+
         TextField usernameInput = FXUtils.createTextfield("Insert username here");
         usernameInput.setStyle("-fx-text-inner-color: blue;");
         usernameInput.setStyle("-fx-text-inner-color: black;");
@@ -80,35 +105,47 @@ public class Login extends Application {
         PasswordField passwordInput = FXUtils.createPasswordField("Insert password here");
 
         // Login & Activate buttons
-        Button loginbutton = FXUtils.createButton("Log in");
-        Button ActivateButton = FXUtils.createButton("Activate");
+        loginbutton = FXUtils.createButton("Log in");
+        activatebutton = FXUtils.createButton("Activate");
+
+        // Change the distance between the login and activate button
+        GridPane.setMargin(activatebutton, new Insets(0, 0, 0, -100));
 
         // Set positions of the components
-        GridPane.setConstraints(FXUtils.createLabel("Username"), 0, 0);
-        GridPane.setConstraints(FXUtils.createLabel("Password"), 0,1);
-        GridPane.setConstraints(usernameInput, 1,0);
+        GridPane.setConstraints(emailLabel, 0, 0);
+        GridPane.setConstraints(passwordLabel, 0, 1);
+        GridPane.setConstraints(usernameInput, 1, 0);
         GridPane.setConstraints(passwordInput, 1, 1);
         GridPane.setConstraints(loginbutton, 1, 2);
-        GridPane.setConstraints(ActivateButton, 2, 2);
+        GridPane.setConstraints(activatebutton, 2, 2);
         //</editor-fold>
 
         //<editor-fold desc="Object listener">
         loginbutton.setOnAction(e -> {
-            // If credentials are correct, open program.
-            if(checkCredentials(usernameInput.getText(), passwordInput.getText())){
+
+            if (checkCredentials(usernameInput.getText(), passwordInput.getText())) {
+
                 window.close();
                 Workspace.display();
-            }else{
+
+            } else {
                 // If credentials are not valid, alert the user.
-                AlertBox.display("Wrong credentials!", "You inserted the wrong credentials!");
+                AlertBox.display("Motoro - Error", "Invalid credentials!");
             }
         });
         //</editor-fold>
 
+        activatebutton.setOnAction(e -> {
+
+            Register.display();
+
+        });
+
         //<editor-fold desc="Window properties">
         // Add all components to the grid
         loginbutton.setBackground(new Background(new BackgroundFill(Color.grayRgb(125), CornerRadii.EMPTY, Insets.EMPTY)));
-        grid.getChildren().addAll(usernameInput, passwordInput, loginbutton);
+        activatebutton.setBackground(new Background(new BackgroundFill(Color.grayRgb(125), CornerRadii.EMPTY, Insets.EMPTY)));
+        grid.getChildren().addAll(emailLabel, usernameInput, passwordLabel, passwordInput, loginbutton, activatebutton);
         grid.setBackground(new Background(new BackgroundFill(Color.grayRgb(32), CornerRadii.EMPTY, Insets.EMPTY)));
         Scene scene = new Scene(grid, 300, 200);
 
