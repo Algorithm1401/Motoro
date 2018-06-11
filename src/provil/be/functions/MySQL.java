@@ -22,7 +22,7 @@ public class MySQL {
                 //registering the jdbc driver here, your string to use
                 //here depends on what driver you are using.
                 Class.forName("com.mysql.jdbc.Driver");
-                con = DriverManager.getConnection("jdbc:mysql://pixelgalaxy.org:7000/user_data?" +
+                con = DriverManager.getConnection("jdbc:mysql://pixelgalaxy.org:3306/user_data?" +
                                                         "user=algorithm1401&password=SAFEabc123");
                 if(con != null){
                     System.out.println("Connection made!");

@@ -54,6 +54,7 @@ public class Move {
     public int getSpeed() {
         return speed;
     }
+
     //</editor-fold>
 
 }

@@ -16,24 +16,29 @@ public class Move {
 
     int speed;
     int anglecut;
+    String wobj;
+
     //</editor-fold>
 
     //<editor-fold desc="Movement constructors">
-    public Move(MoveType moveType, Points point, int speed, int anglecut, Tool tool){
+    public Move(MoveType moveType, Points point, int speed, int anglecut, Tool tool, String wobj){
         this.moveType = moveType;
         this.point.add(point);
         this.speed = speed;
         this.anglecut = anglecut;
         this.tool = tool;
+        this.wobj = wobj;
     }
 
-    public Move(MoveType moveType, List<Points> point, int speed, int anglecut, Tool tool){
+    public Move(MoveType moveType, List<Points> point, int speed, int anglecut, Tool tool, String wobj){
         this.moveType = moveType;
         this.point = point;
         this.speed = speed;
         this.anglecut = anglecut;
         this.tool = tool;
+        this.wobj = wobj;
     }
+
     //</editor-fold>
 
     /**
@@ -43,11 +48,11 @@ public class Move {
     public static void set(Move move){
         String moveString = new String();
         if(move.getMoveType().equals(MoveType.LINEAR)){
-        moveString = "MoveJ " + move.getPoint().get(0).getPointName() + ", v" + move.getSpeed() + ", fine," + move.getTool().getToolName() + ";";
+        moveString = "MoveL " + move.getPoint().get(0).getPointName() + ", v" + move.getSpeed() + ", z0," + move.getTool().getToolName() + "\\Wobj:=" + move.getWobj() + ";";
         }else if(move.getMoveType().equals(MoveType.CIRCULAR)){
-        moveString = "MoveC " + move.getPoint().get(0).getPointName() + "," + move.getPoint().get(1).getPointName() + ",z" + move.getAnglecut() + "," + move.getTool().getToolName() + ";";
+        moveString = "MoveC " + move.getPoint().get(0).getPointName() + "," + move.getPoint().get(1).getPointName() + ",z" + move.getAnglecut() + "," + move.getTool().getToolName() + "\\Wobj:=" + move.getWobj() + ";";
         }else{
-            moveString = "MoveJ " + move.getPoint().get(0).getPointName() + ", v" + move.getSpeed() + ", z" + move.getAnglecut() + "," + move.getTool().getToolName() + ";";
+            moveString = "MoveJ " + move.getPoint().get(0).getPointName() + ", v" + move.getSpeed() + ", z" + move.getAnglecut() + "," + move.getTool().getToolName() + "\\Wobj:=" + move.getWobj() + ";";
         }
         System.out.println(moveString);
         ProgramFile.programActions.add(moveString);
@@ -68,6 +73,10 @@ public class Move {
 
     public int getAnglecut() {
         return anglecut;
+    }
+
+    public String getWobj() {
+        return wobj;
     }
 
     public int getSpeed() {

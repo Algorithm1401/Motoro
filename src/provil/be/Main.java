@@ -1,18 +1,26 @@
 package provil.be;
 
 import org.apache.commons.net.ftp.FTPClient;
-import provil.be.flexobjects.*;
+import provil.be.flexobjects.Points;
+import provil.be.flexobjects.ProgramFile;
+import provil.be.flexobjects.Tool;
+import provil.be.flexobjects.Wait;
 import provil.be.flexobjects.move.Move;
 import provil.be.flexobjects.move.MoveType;
-import provil.be.flexobjects.statements.CheckIf;
-import provil.be.flexobjects.statements.For;
-import provil.be.flexobjects.variable.Variable;
-import provil.be.flexobjects.variable.VariableType;
 import provil.be.functions.Connection;
+import provil.be.functions.Coordinates;
+import provil.be.functions.PreMill;
+import provil.be.functions.Vector;
+import provil.be.functions.rotation.Euler;
+import provil.be.functions.stl.STL;
+import provil.be.functions.stl.Triangle;
 import provil.be.gui.Login;
 
 import java.io.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 
 /**
  * Created by robin on 6/11/2017.
@@ -20,7 +28,7 @@ import java.util.*;
 
 public class Main {
 
-    public static File propertiesConfig = new File(System.getProperty("user.home") + "/Desktop" + "/config.properties");
+    public static File propertiesConfig = new File(System.getProperty("user.home") + "/AppData/Roaming/Motoro/config.properties");
 
     /**
      *
@@ -84,9 +92,11 @@ public class Main {
 
      */
 
-    public static void setPropertyValue(Map<String, ?> propertyValues){
+    public static void setPropertyValue(Map<String, String> propertyValues){
 
         Properties properties = new Properties();
+
+
 
         try{
 
@@ -103,18 +113,23 @@ public class Main {
 
     }
 
-    /**
+    public static boolean ConfigExists(){
+        return propertiesConfig != null;
+    }
 
-    Methode om het programma aan te geven waar
-    de properties file zich bevindt.
+    public static void createDefaultConfig(){
 
-    @param properties pad naar het properties bestand.
+        if(!ConfigExists()){
+            File file = new File(propertiesConfig.getPath());
+            try{
 
-     */
+                file.mkdirs();
 
-    public static void setConfigPath(File properties){
-        propertiesConfig = properties;
-        System.out.println(properties.getPath() + " path selected properties file");
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+
     }
 
     /**
@@ -127,131 +142,65 @@ public class Main {
 
      */
 
+    // x 438.02 y -57.81 z 483.09 q1=0.534746 q2=-0.476851 q3=0.625043 q4=-0.309809 cf1 = 0 cf4 = -1 cf6 = -1 cfx = 0
+
     public static void generateRobotFiles(){
         // Temporary inputs for the path and name of the program
         String path = "C:\\Users\\robin.peeters.PROVDOM\\Desktop\\";
         String programName = "FirstCommunication";
 
         // Tool object with all parameters
-        Tool tool = new Tool("Tool", true,122.5,0,97.5,1,0,0,0,0.2,-5,0,8,1,0,0,0,0,0,0);
+        // true, -7.24743, -10.0201, 127.232, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0
+        Tool tool = new Tool("Tool", true,-7.24743,-10.0201,127.232,1,0,0,0,1,0,0,4,1,0,0,0,0,0,0);
 
         //<editor-fold desc="All points in program">
         // All points that need to be defined in the program
         List<Points> pointsList = new ArrayList<>();
         // Default for quaternion: 0, 0, 1, 0
 
-        // Rectangle Location
-        pointsList.add(new Points("p1", 500, 0, 400, 0, 0, 1, 0, 0, 0, -1));
-        pointsList.add(new Points("p2", 400, 0, 400, 0, 0, 1, 0, 0, 0, -1));
-        pointsList.add(new Points("p3", 400, 100, 400, 0, 0, 1, 0, 0, 0, -1));
-        pointsList.add(new Points("p4", 500, 100, 400, 0, 0, 1, 0, 0, 0, -1));
+        int loop = 0;
+        System.out.println(PreMill.getCubikPoints().toString());
+        for(Coordinates p : PreMill.getCubikPoints()){
+            pointsList.add(new Points("p" + loop, p.getX2(), p.getY2(), p.getZ2(), 1, 0, 0, 0,-1, -1, -1, 0));
+            System.out.println("premill point: " + p.getX2() + "," + p.getY2() + "," + p.getZ2());
+            loop++;
+        }
 
-        // Tool Locations
-        pointsList.add(new Points("p5", 281.97,-296.06,84.77,0.127824,0.432438,0.891297,-0.0474109,-1,0,0));
-        pointsList.add(new Points("p6", 222.66,-291.19,80,0.0646644,0.232213,0.970512,0.00153354,-1,0,-1));
+        List<Triangle> triangles = STL.getStlConverted();
+        for(int i = loop; i < triangles.size(); i++){
+            Triangle t = triangles.get(i);
+            Euler euler = new Euler();
+            List<Double> quaternions = Euler.toQuaternions(euler.getResults(Vector.getTriangleVector(t)));
+            System.out.println(quaternions.toString() + " Quaternions");
+            //pointsList.add(new Points("p" + i, t.getMiddle().getX2() * 100 + 250, t.getMiddle().getY2() * 100 + 20, t.getMiddle().getZ2() * 100 + 10, quaternions.get(0), quaternions.get(1), quaternions.get(2), quaternions.get(3), 0, 0, -1));
+            pointsList.add(new Points("p" + i, t.getMiddle().getX2() * 10, t.getMiddle().getY2() * 10, t.getMiddle().getZ2() * 10 - 200, quaternions.get(0), quaternions.get(1), quaternions.get(2), quaternions.get(3), 0, -1, -1, 1));
+        }
 
-        // Remove tool locations
-        pointsList.add(new Points("p7", 410.48,-280.53,106.56,0.133331,0.842672,0.520881,0.0284548,-1,0,0));
-        pointsList.add(new Points("p8", 441.99,-353.37,95,0.0419293,0.998075,-0.012311,0.044013,-1,0,1));
-        pointsList.add(new Points("p9", 588.79,151.26,625.32,0.506835,0.417602,0.654986,0.37379,0,0,0));
+            //pointsList.add(new Points("p9", 588.79,151.26,625.32,0.506835,0.417602,0.654986,0.37379,0,0,0));
 
         //</editor-fold>
 
         //<editor-fold desc="All movements in program">
         // All the movements that have to be made.
         List<Move> moveList = new ArrayList<>();
-        //moveList.add(new Move("Linear", pointsList.get(0), 500, 0, tool));
-        moveList.add(new Move(MoveType.LINEAR, pointsList.get(0), 500, 0, tool));
-        moveList.add(new Move(MoveType.LINEAR, pointsList.get(1), 500, 0, tool));
-        moveList.add(new Move(MoveType.LINEAR, pointsList.get(2), 500, 0, tool));
-        moveList.add(new Move(MoveType.LINEAR, pointsList.get(3), 500, 0, tool));
+        for(Points p : pointsList){
+            moveList.add(new Move(MoveType.LINEAR, p, 200, 0, tool, "freespl"));
+        }
 
-        // Taketool movements
-        moveList.add(new Move(MoveType.LINEAR, pointsList.get(4), 500, 0, tool));
-        moveList.add(new Move(MoveType.LINEAR, pointsList.get(5), 500, 0, tool));
-
-        // Removetool movements
-        moveList.add(new Move(MoveType.LINEAR, pointsList.get(6), 500, 0, tool));
-        moveList.add(new Move(MoveType.LINEAR, pointsList.get(7), 500, 0, tool));
-
-        moveList.add(new Move(MoveType.LINEAR, pointsList.get(8), 500, 0, tool));
+            //moveList.add(new Move(MoveType.LINEAR, pointsList.get(8), 500, 0, tool));
 
         //</editor-fold>
 
-        Clock clock1 = new Clock("clock1");
         Wait wait1s = new Wait(1);
-        Variable speedNum = new Variable(VariableType.NUM, "speedNum", "0");
-        Variable totalLoops = new Variable(VariableType.NUM, "totalLoops", "0");
-        Variable totalLoopsS = new Variable(VariableType.NUM, "totalLoopsS", "0");
-        Variable speedNumS = new Variable(VariableType.NUM, "speedNumS", "0");
-        Variable speed = new Variable(VariableType.SPEED, "speed", "[1000,500,5000,1000]");
-        Variable time = new Variable(VariableType.NUM, "time", "0");
-        Variable timeS = new Variable(VariableType.NUM, "timeS", "0");
 
-        List<String> speedNumOptionValues = Arrays.asList(
+        for(Move m : moveList){
+            Move.set(m);
+            //Wait.set(wait1s);
+        }
 
-                "1", Variable.getEqual(speed, "v500"),
-                "2", Variable.getEqual(speed, "v1500"),
-                "3", Variable.getEqual(speed, "v2500")
+            //Wait.set(wait1s);
+            //Move.set(moveList.get(8));
 
-        );
-
-        Variable.define(speedNum);
-        Variable.define(totalLoops);
-        Variable.define(time);
-        Variable.define(speed);
-        Variable.define(totalLoopsS);
-        Variable.define(speedNumS);
-        Variable.define(timeS);
-
-        Panel.erase();
-        Panel.requestNum("Hoeveel loops?", totalLoops);
-        Panel.erase();
-        Panel.requestNum("Snelheid 1, 2 of 3?", speedNum);
-        Panel.erase();
-        Panel.write("Total loops: " + Variable.NumToString(totalLoops, totalLoopsS));
-
-        CheckIf.setOptions(speedNum, speedNumOptionValues);
-
-        Panel.write("Speed: " + Variable.NumToString(speedNum, speedNumS));
-
-        Clock.start(clock1);
-
-        Move.set(moveList.get(4));
-        Wait.set(wait1s);
-
-        Move.set(moveList.get(5));
-        Panel.write("Tool attached");
-        Wait.set(wait1s);
-
-        For.start("i", "1", "totalLoops");
-
-        // Rectangle movement
-        Move.set(moveList.get(0));
-        Wait.set(wait1s);
-
-        Move.set(moveList.get(1));
-        Wait.set(wait1s);
-
-        Move.set(moveList.get(2));
-        Wait.set(wait1s);
-
-        Move.set(moveList.get(3));
-        Wait.set(wait1s);
-
-        For.stop();
-
-        Move.set(moveList.get(0));
-        Move.set(moveList.get(6));
-        Move.set(moveList.get(7));
-        Wait.set(wait1s);
-        Move.set(moveList.get(8));
-
-        Clock.stop(clock1);
-        Variable.setEqual(time, Clock.read(clock1));
-        Panel.write("Time elapsed: " + Variable.NumToString(time, timeS) + " seconds");
-        Wait.set(new Wait(3));
-        Clock.reset(clock1);
 
         // Create the program files in a folder on the desktop.
         ProgramFile.createProgramFiles(new ProgramFile(moveList, pointsList, tool), programName, path);
@@ -277,5 +226,7 @@ public class Main {
 
         Login.startGUI(args);
     }
+
+
 
 }

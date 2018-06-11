@@ -13,6 +13,7 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import provil.be.Main;
 import provil.be.functions.MySQL;
 
 /**
@@ -104,6 +105,16 @@ public class Login extends Application {
 
         PasswordField passwordInput = FXUtils.createPasswordField("Insert password here");
 
+        // TESTING PURPOSES, DELETE AFTER
+        Button testbutton = FXUtils.createButton("Test");
+        testbutton.setBackground(new Background(new BackgroundFill(Color.grayRgb(125), CornerRadii.EMPTY, Insets.EMPTY)));
+        GridPane.setConstraints(testbutton, 3, 1);
+        testbutton.setOnAction(e -> {
+            window.close();
+            Workspace.display();
+        });
+        //
+
         // Login & Activate buttons
         loginbutton = FXUtils.createButton("Log in");
         activatebutton = FXUtils.createButton("Activate");
@@ -137,6 +148,8 @@ public class Login extends Application {
 
         activatebutton.setOnAction(e -> {
 
+            System.out.println(Main.propertiesConfig.getPath());
+
             Register.display();
 
         });
@@ -145,7 +158,7 @@ public class Login extends Application {
         // Add all components to the grid
         loginbutton.setBackground(new Background(new BackgroundFill(Color.grayRgb(125), CornerRadii.EMPTY, Insets.EMPTY)));
         activatebutton.setBackground(new Background(new BackgroundFill(Color.grayRgb(125), CornerRadii.EMPTY, Insets.EMPTY)));
-        grid.getChildren().addAll(emailLabel, usernameInput, passwordLabel, passwordInput, loginbutton, activatebutton);
+        grid.getChildren().addAll(emailLabel, usernameInput, passwordLabel, passwordInput, loginbutton, activatebutton, testbutton);
         grid.setBackground(new Background(new BackgroundFill(Color.grayRgb(32), CornerRadii.EMPTY, Insets.EMPTY)));
         Scene scene = new Scene(grid, 300, 200);
 

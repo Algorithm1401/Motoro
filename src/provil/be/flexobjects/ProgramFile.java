@@ -49,6 +49,8 @@ public class ProgramFile {
 
         initProgram2.addAll(initProgram);
 
+        initProgram2.add("TASK PERS wobjdata freespl:=[FALSE,TRUE,\"\",[[41.6683,-452.919,55.20221],[0,0,-1,0]],[[0,0,0],[1,0,0,0]]];");
+
         initProgram2.add("PROC main()");
 
         endProgram.add("ENDPROC");

@@ -1,12 +1,12 @@
 <component name="libraryTable">
   <library name="libraries">
     <CLASSES>
-      <root url="file://$PROJECT_DIR$/../Mappen/GIP 6EE/libraries" />
+      <root url="file://$USER_HOME$/Desktop/libraries" />
     </CLASSES>
     <JAVADOC>
-      <root url="file://$PROJECT_DIR$/../Mappen/GIP 6EE/libraries/apidoc" />
+      <root url="file://$USER_HOME$/Desktop/libraries/apidoc" />
     </JAVADOC>
     <SOURCES />
-    <jarDirectory url="file://$PROJECT_DIR$/../Mappen/GIP 6EE/libraries" recursive="false" />
+    <jarDirectory url="file://$USER_HOME$/Desktop/libraries" recursive="false" />
   </library>
 </component>

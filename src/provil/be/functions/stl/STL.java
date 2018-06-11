@@ -1,25 +1,30 @@
 package provil.be.functions.stl;
 
 import provil.be.functions.Coordinates;
+import provil.be.functions.PreMill;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 
 /**
  * Created by robin on 27/02/2018.
  */
 public class STL {
 
-    private static Set<Triangle> stlConverted = new HashSet<>();
+    private static List<Triangle> stlConverted = new ArrayList<>();
+    private static double xMax;
+    private static double yMax;
+    private static double zMax;
+    private static List<Triangle> stlScaled = new ArrayList<>();
 
     public static void parseSTL(File stl) {
 
         try {
-
-            stlConverted = new HashSet<>();
 
             File stlToTXT = new File(stl.getPath().replace(".stl", ".txt"));
             FileInputStream in = null;
@@ -59,6 +64,15 @@ public class STL {
                     normal = new Coordinates(doubles.get(0), doubles.get(1), doubles.get(2));
                 } else if (nextLine.contains("vertex")) {
                     doubles = DoublesInString(nextLine);
+                    if(xMax < doubles.get(0)){
+                        xMax = doubles.get(0);
+                    }
+                    if(yMax < doubles.get(1)){
+                        yMax = doubles.get(1);
+                    }
+                    if(zMax < doubles.get(2)){
+                        zMax = doubles.get(2);
+                    }
                     Coordinates point = new Coordinates(doubles.get(0), doubles.get(1), doubles.get(2));
                     vertexes.add(point);
                 } else if (nextLine.contains("endloop")) {
@@ -71,6 +85,15 @@ public class STL {
             }
 
             scanner.close();
+
+            for(Triangle t : getStlConverted()){
+                stlScaled.add(new Triangle(
+                        new Coordinates(PreMill.objectWidth * (t.getP1().getX2() / xMax), PreMill.objectLength * (t.getP1().getY2() / yMax), PreMill.objectHeigth * (t.getP1().getZ2() / zMax)),
+                        new Coordinates(PreMill.objectWidth * (t.getP2().getX2() / xMax), PreMill.objectLength * (t.getP2().getY2() / yMax), PreMill.objectHeigth * (t.getP2().getZ2() / zMax)),
+                        new Coordinates(PreMill.objectWidth * (t.getP3().getX2() / xMax), PreMill.objectLength * (t.getP3().getY2() / yMax), PreMill.objectHeigth * (t.getP3().getZ2() / zMax)),
+                        t.getMidpoint()
+                        ));
+            }
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -90,7 +113,8 @@ public class STL {
             return doubles;
     }
 
-    public static Set<Triangle> getStlConverted() {
-        return stlConverted;
+    public static List<Triangle> getStlConverted() {
+        return stlScaled;
     }
+
 }

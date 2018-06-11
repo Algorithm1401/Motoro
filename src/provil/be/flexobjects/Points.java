@@ -21,9 +21,10 @@ public class Points {
     int rotAxis1;
     int rotAxis4;
     int rotAxis6;
+    int rotAxisCFX;
     //</editor-fold>
 
-    public Points(String pointName, double x, double y, double z, double q1, double q2, double q3, double q4, int rotAxis1, int rotAxis4, int rotAxis6){
+    public Points(String pointName, double x, double y, double z, double q1, double q2, double q3, double q4, int rotAxis1, int rotAxis4, int rotAxis6, int rotAxisCFX){
         this.pointName = pointName;
         this.x = x;
         this.y = y;
@@ -35,6 +36,7 @@ public class Points {
         this.rotAxis1 = rotAxis1;
         this.rotAxis4 = rotAxis4;
         this.rotAxis6 = rotAxis6;
+        this.rotAxisCFX = rotAxisCFX;
     }
 
     public static String set(Points point){
@@ -42,7 +44,7 @@ public class Points {
         String pointString = "CONST robtarget " + point.getPointName() + ":=[[" +
                 point.getX() + "," + point.getY() + "," + point.getZ() + "],[" +
                 point.getQ1() + "," + point.getQ2() + "," + point.getQ3() + "," + point.getQ4() + "],[" +
-                point.getRotAxis1() + "," + point.getRotAxis4() + "," + point.getRotAxis6() + ",0],[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]];";
+                point.getRotAxis1() + "," + point.getRotAxis4() + "," + point.getRotAxis6() + "," + point.getRotAxisCFX() + "],[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]];";
 
         return pointString;
     }
@@ -91,5 +93,10 @@ public class Points {
     public int getRotAxis6() {
         return rotAxis6;
     }
+
+    public int getRotAxisCFX() {
+        return rotAxisCFX;
+    }
+
     //</editor-fold>
 }

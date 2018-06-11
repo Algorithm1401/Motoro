@@ -38,6 +38,7 @@ public class Tool {
      *
      * Object om de tool te definiëren en om te zetten naar RAPID code
      *
+     *
      */
 
     public Tool(String toolName, boolean robhold, double x, double y, double z, double q1, double q2, double q3, double q4,

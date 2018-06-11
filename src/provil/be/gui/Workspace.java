@@ -195,7 +195,7 @@ public class Workspace {
         saveitem = new MenuItem("Save");
         saveasitem = new MenuItem("Save as");
         settingsitem = new MenuItem("Settings");
-        generateitem = new MenuItem("Generate files");
+        generateitem = new MenuItem("Convert and send");
         exititem = new MenuItem("Exit");
 
         // Define edit menu items
@@ -291,9 +291,13 @@ public class Workspace {
 
         });
 
-        settingsitem.setOnAction(e -> Settings.display());
+        settingsitem.setOnAction(e -> {
+            Settings.display();
+        });
 
-        generateitem.setOnAction(e -> Main.generateRobotFiles());
+        generateitem.setOnAction(e -> {
+            Main.generateRobotFiles();
+        });
 
         exititem.setOnAction(e -> {
             if (ExitProgram.display("Exit program?", "Are you sure you want to exit the program?")) {
