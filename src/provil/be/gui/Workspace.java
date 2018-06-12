@@ -68,20 +68,6 @@ public class Workspace {
         });
     }
 
-    public static void addMouseDrag(Node node){
-        node.setOnDragDetected(e -> {
-
-            System.out.println(e.getPickResult().getIntersectedDistance() + "Distance in double");
-            System.out.println(e.getPickResult().getIntersectedPoint().getX() + " X from point");
-            System.out.println(e.getPickResult().getIntersectedPoint().getY());
-
-            MODEL_X_OFFSET += e.getPickResult().getIntersectedPoint().getX();
-            MODEL_Y_OFFSET += e.getPickResult().getIntersectedPoint().getY();
-            pane.setCenter(stlViewer());
-
-        });
-    }
-
     /**
      * @return oppervlakte met de bijhorende 3D mesh data
      */
@@ -173,7 +159,6 @@ public class Workspace {
         addCamera(stlScene);
 
         addMouseScrolling(stlView);
-        addMouseDrag(stlView);
 
         return group;
     }
@@ -195,7 +180,7 @@ public class Workspace {
         saveitem = new MenuItem("Save");
         saveasitem = new MenuItem("Save as");
         settingsitem = new MenuItem("Settings");
-        generateitem = new MenuItem("Convert and send");
+        generateitem = new MenuItem("Generate files");
         exititem = new MenuItem("Exit");
 
         // Define edit menu items
